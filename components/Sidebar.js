@@ -10,7 +10,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-
+import { auth } from '../firebase';
+import Signout from './Signout';
 
 
 
@@ -35,7 +36,7 @@ function Sidebar() {
         }
   return (
     <Container>
-
+    <Signout />
     <AppBar position="static">
         <Wrapper >
             <IconButton edge="start" color="inherit" aria-label="open drawer">
