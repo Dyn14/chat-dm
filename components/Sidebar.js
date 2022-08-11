@@ -11,16 +11,35 @@ import Toolbar from '@material-ui/core/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { auth } from '../firebase';
+import {useAuthState} from "react-firebase-hooks/auth";
 import Signout from './Signout';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { CollectionReference } from '@firebase/firestore';
+import { db } from '../firebase';
+import { collection } from '@firebase/firestore';
+import { getFirestore } from 'firebase/firestore'
 
 
-
-
-
+const Chat = () => {
+  return(
+   <Boxe>
+    <Avatar margin='5px'/>
+    <h2>user@gmail.com</h2>
+   </Boxe>
+  )
+}
 
 
 
 function Sidebar() {
+  const [user] = useAuthState(auth);
+  const [snapshot, loading, error] =  useCollection(
+    collection(getFirestore(), 'chats'),
+  );
+
+
+  console.log(snapshot);
+
 
     const createChat = () => {
         const input = prompt(
@@ -35,13 +54,13 @@ function Sidebar() {
     
         }
   return (
-    <Container>
-    <Signout />
+    <Tainer>
+
     <AppBar position="static">
         <Wrapper >
-            <IconButton edge="start" color="inherit" aria-label="open drawer">
-            <Avatar />
-            </IconButton>
+            
+            <Avatar src={user.photoURL} />
+       
                 <section>           
                     <Badge color="secondary" badgeContent={0} showZero aria-label="display more actions" className='mail'>
                         <IconButton color="inherit">
@@ -59,13 +78,59 @@ function Sidebar() {
        </Search>
 
        <SidebarButton onClick={createChat}>Start a new Chat</SidebarButton>
+
+      <ChatContain>
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+        <Chat />
+      </ChatContain>
+     
   </AppBar>
-   
-    </Container>
+    
+ 
+
+    </Tainer>
   );
 }
 
 export default Sidebar;
+
+
+// Chat 
+const Boxe = styled.div`
+  display: flex;
+  margin-top: 3px;
+`;
+
+const ChatContain = styled.div`
+display: flex;
+flex-direction: column;
+overflow-X: scroll;
+
+`;
+
+const Tainer = styled.div`
+min-width: 300px;
+overflow-X: scroll;
+scroll-behavior: smooth;
+height: 100vh;
+border: 1px solid black;
+
+`;
 
 const Wrapper = styled.section`
   display: flex;

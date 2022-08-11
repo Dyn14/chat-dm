@@ -6,6 +6,7 @@ function Loading() {
     <center style={{display: "grid", placeItems: "center", height: "100vh"}}>
         <div>
             <DoubleBounce color="green" size={70} />
+            
         </div>
     </center>
     
