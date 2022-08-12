@@ -8,13 +8,13 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCaDG5WUdgi5nRNhBpUiOFtKYk_Ga6F-gQ",
-    authDomain: "what-dm.firebaseapp.com",
-    projectId: "what-dm",
-    storageBucket: "what-dm.appspot.com",
-    messagingSenderId: "386631534762",
-    appId: "1:386631534762:web:f6c8e071dbd9c8715628d3"
-  };
+  apiKey: "AIzaSyCaDG5WUdgi5nRNhBpUiOFtKYk_Ga6F-gQ",
+  authDomain: "what-dm.firebaseapp.com",
+  projectId: "what-dm",
+  storageBucket: "what-dm.appspot.com",
+  messagingSenderId: "386631534762",
+  appId: "1:386631534762:web:f6c8e071dbd9c8715628d3"
+};
 
 
   const app = initializeApp(firebaseConfig);

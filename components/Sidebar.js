@@ -10,7 +10,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import { auth } from '../firebase';
+import { app, auth } from '../firebase';
 import {useAuthState} from "react-firebase-hooks/auth";
 import Signout from './Signout';
 import { useCollection } from 'react-firebase-hooks/firestore';
@@ -20,26 +20,28 @@ import { collection } from '@firebase/firestore';
 import { getFirestore } from 'firebase/firestore'
 
 
-const Chat = () => {
-  return(
-   <Boxe>
-    <Avatar margin='5px'/>
-    <h2>user@gmail.com</h2>
-   </Boxe>
-  )
-}
+
 
 
 
 function Sidebar() {
   const [user] = useAuthState(auth);
   const [snapshot, loading, error] =  useCollection(
-    collection(getFirestore(), 'chats'),
-  );
+    collection(getFirestore(app), 'Chats'),);
+  const chats = snapshot?.docs.map(doc => ({id: doc.id, ...doc.data()}))
 
-
-  console.log(snapshot);
-
+  const chatList = () => {
+    return(
+      chats?.map(
+        chat =>
+        <Boxe key={Math.random()} >
+          <Avatar  margin='5px'/>
+          <h2>{chat.users}</h2>
+       </Boxe>
+      )
+    )
+  }
+console.log(chats);
 
     const createChat = () => {
         const input = prompt(
@@ -80,23 +82,7 @@ function Sidebar() {
        <SidebarButton onClick={createChat}>Start a new Chat</SidebarButton>
 
       <ChatContain>
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
+        {chatList()}
       </ChatContain>
      
   </AppBar>
