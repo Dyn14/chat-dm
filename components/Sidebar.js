@@ -16,10 +16,12 @@ import Signout from './Signout';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { CollectionReference } from '@firebase/firestore';
 import { db } from '../firebase';
-import { collection } from '@firebase/firestore';
+import { collection, addDoc } from '@firebase/firestore';
 import { getFirestore } from 'firebase/firestore'
-
-
+import getOtherEmail from '../utils/getOtherEmail';
+import { redirect } from 'next/dist/server/api-utils';
+import { useRouter } from 'next/router';
+import { async } from '@firebase/util';
 
 
 
@@ -28,32 +30,39 @@ function Sidebar() {
   const [user] = useAuthState(auth);
   const [snapshot, loading, error] =  useCollection(
     collection(getFirestore(app), 'Chats'),);
-  const chats = snapshot?.docs.map(doc => ({id: doc.id, ...doc.data()}))
+  const chats = snapshot?.docs.map(doc => ({id: doc.id, ...doc.data()}));
+  const router = useRouter();
+
+
+const redirect = (id) => {
+  router.push(`/chat/${id}`)
+}
 
   const chatList = () => {
     return(
-      chats?.map(
+      chats?.filter(chat => chat.users.includes(user.email)).map(
         chat =>
-        <Boxe key={Math.random()} >
+        <Boxe key={Math.random()} onClick={() => redirect(chat.id)} >
           <Avatar  margin='5px'/>
-          <h2>{chat.users}</h2>
+          <h2>{getOtherEmail(chat.users, user)}</h2>
        </Boxe>
       )
     )
   }
-console.log(chats);
 
-    const createChat = () => {
+
+
+    const chatExist = email => chats?.find(chat => (chat.users.includes(user.email) && chat.users.includes(email)));
+    
+
+    const createChat = async() => {
         const input = prompt(
             'Please enter an email adress for the user you with to chat with'
             );
-
-            if (!input) return null;
-            
-            if (EmailValidator.validate(input)) {
-                
-            };
-    
+          if (!chatExist(input) && (input != user.email)){
+          await addDoc(collection(getFirestore(), "Chats"), {users: [user.email, input]})
+          }
+         
         }
   return (
     <Tainer>
