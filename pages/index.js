@@ -1,11 +1,13 @@
 import Head from 'next/head'
 import Sidebar from '../components/Sidebar'
-import Chat from './chat/id'
+import Chat from './chat/[id]'
 import styled from 'styled-components';
+import { useRouter} from "next/router";
 
 
 
 export default function Home() {
+
   return (
     <div>
       <Head>
@@ -15,7 +17,7 @@ export default function Home() {
 
     <Section>
       <Sidebar /> 
-      <Chat />
+  
     </Section>  
    
      

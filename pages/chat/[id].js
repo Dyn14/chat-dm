@@ -2,12 +2,24 @@ import React from 'react'
 import styled from 'styled-components';
 import { Avatar, Badge, Container } from '@mui/material';
 import SendIcon from '@material-ui/icons/Send';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 
 
 function Chat() {
+    const router = useRouter();
+    const { id } = router.query;
+    
+    console.log(id);
+
   return (
    <Wrap>
+
+        <Head>
+            <title>Chat-dm msg</title>
+        </Head>
+
         <Top>
             <Avatar />
             <Text>Nom utilisateur</Text>

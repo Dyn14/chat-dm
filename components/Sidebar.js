@@ -34,9 +34,11 @@ function Sidebar() {
   const router = useRouter();
 
 
+
 const redirect = (id) => {
   router.push(`/chat/${id}`)
 }
+
 
   const chatList = () => {
     return(
@@ -50,6 +52,7 @@ const redirect = (id) => {
     )
   }
 
+ 
 
 
     const chatExist = email => chats?.find(chat => (chat.users.includes(user.email) && chat.users.includes(email)));
@@ -59,7 +62,7 @@ const redirect = (id) => {
         const input = prompt(
             'Please enter an email adress for the user you with to chat with'
             );
-          if (!chatExist(input) && (input != user.email)){
+          if (!chatExist(input) && (input != user.email) && (input == null)){
           await addDoc(collection(getFirestore(), "Chats"), {users: [user.email, input]})
           }
          
