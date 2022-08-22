@@ -4,14 +4,53 @@ import { Avatar, Badge, Container } from '@mui/material';
 import SendIcon from '@material-ui/icons/Send';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { query } from 'firebase/firestore/lite';
+import { collection, doc, orderBy } from 'firebase/firestore';
+import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
+import { app, auth } from '../../firebase';
+import { getFirestore} from 'firebase/firestore';
+import { userAgent } from 'next/server';
+import {useAuthState} from "react-firebase-hooks/auth";
+import getOtherEmail from '../../utils/getOtherEmail';
+
+
 
 
 
 function Chat() {
     const router = useRouter();
     const { id } = router.query;
+    const [user] = useAuthState(auth);
+
+    const q = query(collection(getFirestore(app), `Chats/${id}/message`), orderBy("time"));
+    const [messages] = useCollectionData(q);
+
+    const [chat] = useDocumentData(doc(getFirestore(app), "Chats", id))
+    console.log(chat);
+
+    const getMessages = () =>
+     messages?.map(msg => {
+        const sender = msg.sender === user.email
+
+        if(sender){
+            return(
+                <UserMessage key={Math.random()}>
+                    <Text>{msg.text}</Text>
+                </UserMessage>
+            )
+        }
+        if(!sender){
+            return(
+                <ClientMessage key={Math.random()}>
+                    <Text>{msg.text}</Text>
+                </ClientMessage>
+            )
+        }
+       
+     })
+
     
-    console.log(id);
+
 
   return (
    <Wrap>
@@ -22,69 +61,10 @@ function Chat() {
 
         <Top>
             <Avatar />
-            <Text>Nom utilisateur</Text>
+            <Text>{getOtherEmail(chat?.users, user)}</Text>
         </Top>
         <ChatBox>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
-            <UserMessage>
-                <TextChat>je dis nimp</TextChat>
-            </UserMessage>
-            <ClientMessage>
-            <TextChat>Ah bon comme je suis choque</TextChat>
-            </ClientMessage>
+           {getMessages()}
         </ChatBox>
         <BottomBar>
         <Input type="Text" placeholder='ecrivez votre texte ici' width="100%" /> 
